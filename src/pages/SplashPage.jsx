@@ -73,9 +73,9 @@ export function SplashPage() {
         >
           Proceed to Login
         </Button>
-        <button className="text-white/70 text-sm text-center underline underline-offset-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded min-h-[44px]">
+        <span className="text-white/60 text-sm text-center min-h-[44px] flex items-center justify-center" aria-label="Privacy and Policy — coming soon">
           Privacy and Policy
-        </button>
+        </span>
       </div>
     </div>
   )

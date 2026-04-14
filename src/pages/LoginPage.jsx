@@ -1,15 +1,21 @@
 // src/pages/LoginPage.jsx
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../components/ui/Button.jsx'
 import { login } from '../utils/auth.js'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname ?? '/home'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const timerRef = useRef(null)
+
+  // Clean up pending redirect if component unmounts before timer fires
+  useEffect(() => () => clearTimeout(timerRef.current), [])
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -19,9 +25,10 @@ export function LoginPage() {
       return
     }
     setLoading(true)
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       login()
-      navigate('/home')
+      setLoading(false)
+      navigate(from, { replace: true })
     }, 800)
   }
 
@@ -45,6 +52,7 @@ export function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
+              aria-describedby={error ? 'login-error' : undefined}
               className="border border-gray-200 rounded-xl px-4 py-3 text-[#1A1F2E] text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2DB87E] transition-shadow duration-150"
             />
           </div>
@@ -58,12 +66,13 @@ export function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              aria-describedby={error ? 'login-error' : undefined}
               className="border border-gray-200 rounded-xl px-4 py-3 text-[#1A1F2E] text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2DB87E] transition-shadow duration-150"
             />
           </div>
 
           {error && (
-            <p role="alert" className="text-[#DC2626] text-xs font-medium">{error}</p>
+            <p id="login-error" role="alert" className="text-[#DC2626] text-xs font-medium">{error}</p>
           )}
 
           <Button type="submit" disabled={loading} className="w-full mt-1">
