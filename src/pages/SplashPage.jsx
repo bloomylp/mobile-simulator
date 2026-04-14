@@ -15,15 +15,17 @@ function TransitIllustration() {
       <rect x="158" y="60" width="4" height="95" rx="2" fill="#1A7A50" opacity="0.4" />
       {/* Pole right */}
       <rect x="236" y="60" width="4" height="95" rx="2" fill="#1A7A50" opacity="0.4" />
-      {/* Person 1 seated left */}
+      {/* Person 1 — seated left */}
       <ellipse cx="70" cy="148" rx="20" ry="5" fill="#1A7A50" opacity="0.3" />
       <rect x="52" y="108" width="36" height="40" rx="6" fill="#1DB87E" opacity="0.7" />
       <circle cx="70" cy="98" r="12" fill="#E8F7F0" opacity="0.9" />
-      {/* Person 2 standing center */}
+      <rect x="62" y="110" width="16" height="3" rx="1.5" fill="#1A7A50" opacity="0.4" />
+
+      {/* Person 2 — standing center */}
       <rect x="140" y="80" width="40" height="70" rx="6" fill="#E8F7F0" opacity="0.7" />
       <circle cx="160" cy="68" r="14" fill="#E8F7F0" opacity="0.9" />
       <rect x="158" y="62" width="6" height="20" rx="3" fill="#E8F7F0" opacity="0.8" />
-      {/* Person 3 seated right */}
+      {/* Person 3 — seated right */}
       <ellipse cx="250" cy="148" rx="20" ry="5" fill="#1A7A50" opacity="0.3" />
       <rect x="232" y="108" width="36" height="40" rx="6" fill="#1DB87E" opacity="0.7" />
       <circle cx="250" cy="98" r="12" fill="#E8F7F0" opacity="0.9" />
