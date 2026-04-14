@@ -1,11 +1,11 @@
 // src/components/transaction/TransactionRow.jsx
-import { Bus, Train, Tram, Zap } from 'lucide-react'
+import { Bus, Train, TramFront, Zap } from 'lucide-react'
 
 const TYPE_ICON = {
   bus:   Bus,
   metro: Zap,
   rail:  Train,
-  tram:  Tram,
+  tram:  TramFront,
 }
 
 const TYPE_LABEL = {
