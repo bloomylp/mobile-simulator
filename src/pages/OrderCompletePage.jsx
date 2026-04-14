@@ -9,7 +9,7 @@ function CardSuccessIllustration() {
       <ellipse cx="100" cy="132" rx="55" ry="6" fill="#1A1F2E" opacity="0.08" />
 
       {/* Card back (tilted) */}
-      <g transform="rotate(-8, 100, 80)">
+      <g transform="rotate(-8 100 80)">
         <rect x="30" y="50" width="110" height="68" rx="8" fill="#4CC48A" />
         <rect x="30" y="66" width="110" height="14" fill="#2DB87E" />
         <rect x="38" y="88" width="40" height="6" rx="3" fill="white" opacity="0.4" />
@@ -47,7 +47,7 @@ export function OrderCompletePage() {
       {/* Country selector (top right) */}
       <div className="absolute top-4 right-4">
         <select
-          className="text-sm text-[#1A1F2E] bg-white border border-gray-200 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2DB87E]"
+          className="text-sm text-[#1A1F2E] bg-white border border-gray-200 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2DB87E] min-h-[44px]"
           aria-label="Select country"
         >
           <option>US</option>

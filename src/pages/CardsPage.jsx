@@ -1,5 +1,5 @@
 // src/pages/CardsPage.jsx
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Loader2 } from 'lucide-react'
 import { PageShell }   from '../components/layout/PageShell.jsx'
@@ -12,10 +12,13 @@ import { cards }       from '../data/cards.js'
 export function CardsPage() {
   const navigate = useNavigate()
   const [ordering, setOrdering] = useState(false)
+  const timerRef = useRef(null)
+
+  useEffect(() => () => clearTimeout(timerRef.current), [])
 
   function handleOrderNew() {
     setOrdering(true)
-    setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setOrdering(false)
       navigate('/order-complete')
     }, 1500)
