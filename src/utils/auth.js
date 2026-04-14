@@ -10,5 +10,9 @@ export function logout() {
 }
 
 export function isAuthenticated() {
-  return sessionStorage.getItem(KEY) === '1'
+  try {
+    return sessionStorage.getItem(KEY) === '1'
+  } catch {
+    return false
+  }
 }

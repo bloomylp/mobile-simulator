@@ -1,6 +1,8 @@
 // src/utils/filterTransactions.js
 // Returns transactions between fromDate and toDate (inclusive).
-// fromDate and toDate are ISO date strings "YYYY-MM-DD" or empty string.
+// fromDate and toDate are "YYYY-MM-DD" strings or empty string (= no bound).
+// NOTE: t.date must be a local-time ISO string (no Z suffix, no UTC offset).
+// Lexicographic slice comparison is only correct for local-time strings.
 export function filterTransactions(transactions, fromDate, toDate) {
   return transactions.filter((t) => {
     const txDate = t.date.slice(0, 10) // "YYYY-MM-DD"
@@ -10,7 +12,8 @@ export function filterTransactions(transactions, fromDate, toDate) {
   })
 }
 
-// Groups a sorted transactions array by date label ("11 Jan 2024")
+// Groups a transactions array by date label and returns sorted [label, txs][]
+// descending by date (most recent first). Input does not need to be pre-sorted.
 export function groupByDate(transactions) {
   const groups = {}
   for (const t of transactions) {
@@ -20,5 +23,7 @@ export function groupByDate(transactions) {
     if (!groups[label]) groups[label] = []
     groups[label].push(t)
   }
-  return groups // { "11 Jan 2024": [...], "10 Jan 2024": [...] }
+  return Object.entries(groups).sort(([, aTxs], [, bTxs]) =>
+    new Date(bTxs[0].date) - new Date(aTxs[0].date)
+  )
 }

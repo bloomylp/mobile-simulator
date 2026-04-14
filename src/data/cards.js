@@ -13,8 +13,8 @@ export const cards = [
   {
     id: 'card-002',
     name: 'John Smith',
-    pan: '456*******78901',
-    panFull: '4560 0000 0789 01',
+    pan: '4560 00** **** 8901',
+    panFull: '4560 0000 0078 8901',
     expiry: '03/28',
     status: 'pending',
     balance: 0,
@@ -23,8 +23,8 @@ export const cards = [
   {
     id: 'card-003',
     name: 'John Smith',
-    pan: '789*******12345',
-    panFull: '7890 0000 0123 45',
+    pan: '7890 00** **** 2345',
+    panFull: '7890 0000 0012 2345',
     expiry: '07/29',
     status: 'pending',
     balance: 0,
