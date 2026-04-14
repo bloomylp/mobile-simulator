@@ -15,6 +15,7 @@ export function BottomNav() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around items-center h-16 z-40"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Main navigation"
     >
       {tabs.map(({ label, icon: Icon, path }) => {
@@ -31,6 +32,7 @@ export function BottomNav() {
             <Icon
               size={22}
               strokeWidth={active ? 2.5 : 1.75}
+              fill={active ? '#E8F7F0' : 'none'}
               aria-hidden="true"
             />
             <span className={`text-xs font-medium ${active ? 'text-[#2DB87E]' : 'text-[#6B7280]'}`}>

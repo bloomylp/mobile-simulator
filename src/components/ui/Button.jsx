@@ -1,5 +1,5 @@
 // src/components/ui/Button.jsx
-export function Button({ children, variant = 'primary', className = '', ...props }) {
+export function Button({ children, variant = 'primary', className = '', type = 'button', ...props }) {
   const base = 'inline-flex items-center justify-center font-semibold rounded-xl px-6 py-3.5 text-base transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
   const variants = {
     primary:   'bg-[#2DB87E] hover:bg-[#1A7A50] text-white focus-visible:ring-[#2DB87E]',
@@ -8,7 +8,7 @@ export function Button({ children, variant = 'primary', className = '', ...props
     danger:    'bg-[#DC2626] hover:bg-red-700 text-white focus-visible:ring-red-500',
   }
   return (
-    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
+    <button type={type} className={`${base} ${variants[variant]} ${className}`} {...props}>
       {children}
     </button>
   )

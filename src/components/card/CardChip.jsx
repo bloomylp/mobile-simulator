@@ -2,12 +2,12 @@
 export function CardChip({ card }) {
   return (
     <div
-      className="relative rounded-2xl p-5 overflow-hidden select-none"
+      role="region"
+      aria-label={`${card.status} card ending ${card.pan.slice(-4)}`}
+      className="relative rounded-2xl p-5 overflow-hidden select-none min-h-[160px]"
       style={{
         background: 'linear-gradient(135deg, #4CC48A 0%, #2DB87E 60%, #1A7A50 100%)',
-        minHeight: '160px',
       }}
-      aria-label={`${card.status} card ending ${card.pan.slice(-5)}`}
     >
       {/* Decorative circles */}
       <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-10 bg-white" />
