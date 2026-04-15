@@ -1,6 +1,7 @@
 // src/pages/OrderCompletePage.jsx
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button.jsx'
+import { LangToggle } from '../components/ui/LangToggle.jsx'
 
 function CardSuccessIllustration() {
   return (
@@ -43,17 +44,10 @@ export function OrderCompletePage() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-dvh bg-[#F4F6F8] flex items-center justify-center px-6">
-      {/* Country selector (top right) */}
-      <div className="absolute top-4 right-4">
-        <select
-          className="text-sm text-[#1A1F2E] bg-white border border-gray-200 rounded-lg px-3 py-1.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2DB87E] min-h-[44px]"
-          aria-label="Select country"
-        >
-          <option>US</option>
-          <option>GB</option>
-          <option>AU</option>
-        </select>
+    <div className="min-h-full bg-[#F4F6F8] flex items-center justify-center px-6">
+      {/* Language toggle (top right) */}
+      <div className="absolute top-[41px] right-4">
+        <LangToggle />
       </div>
 
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8 flex flex-col items-center gap-6">

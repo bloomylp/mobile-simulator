@@ -106,7 +106,7 @@ export function CardPaymentForm({ amount, onSuccess }) {
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? 'Processing…' : `Pay £${amount.toFixed(2)}`}
+        {loading ? 'Processing…' : `Pay $${amount.toFixed(2)}`}
       </Button>
     </form>
   )

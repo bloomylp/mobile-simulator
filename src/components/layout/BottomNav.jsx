@@ -1,24 +1,26 @@
 // src/components/layout/BottomNav.jsx
 import { useNavigate, useLocation } from 'react-router-dom'
 import { CreditCard, Home, User } from 'lucide-react'
+import { useLang } from '../../context/LangContext.jsx'
 
 const tabs = [
-  { label: 'Cards', icon: CreditCard, path: '/cards' },
-  { label: 'Home',  icon: Home,       path: '/home'  },
-  { label: 'Profile', icon: User,     path: '/profile' },
+  { key: 'cards',   icon: CreditCard, path: '/cards'   },
+  { key: 'home',    icon: Home,       path: '/home'    },
+  { key: 'profile', icon: User,       path: '/profile' },
 ]
 
 export function BottomNav() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { t } = useLang()
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around items-center h-16 z-40"
+      className="bg-white border-t border-gray-100 flex justify-around items-center h-16"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Main navigation"
     >
-      {tabs.map(({ label, icon: Icon, path }) => {
+      {tabs.map(({ key, icon: Icon, path }) => {
         const active = pathname === path
         return (
           <button
@@ -26,17 +28,17 @@ export function BottomNav() {
             onClick={() => navigate(path)}
             aria-current={active ? 'page' : undefined}
             className={`flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E] ${
-              active ? 'text-[#2DB87E]' : 'text-[#6B7280]'
+              active ? 'bg-[#2DB87E] text-white' : 'text-[#6B7280]'
             }`}
           >
             <Icon
               size={22}
               strokeWidth={active ? 2.5 : 1.75}
-              fill={active ? '#E8F7F0' : 'none'}
+              fill={active ? 'rgba(255,255,255,0.2)' : 'none'}
               aria-hidden="true"
             />
-            <span className={`text-xs font-medium ${active ? 'text-[#2DB87E]' : 'text-[#6B7280]'}`}>
-              {label}
+            <span className={`text-xs font-medium ${active ? 'text-white' : 'text-[#6B7280]'}`}>
+              {t[key]}
             </span>
           </button>
         )

@@ -12,14 +12,19 @@ export function filterTransactions(transactions, fromDate, toDate) {
   })
 }
 
+function ordinalDay(n) {
+  const v = n % 100
+  if (v >= 11 && v <= 13) return `${n}th`
+  return `${n}${{ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] ?? 'th'}`
+}
+
 // Groups a transactions array by date label and returns sorted [label, txs][]
 // descending by date (most recent first). Input does not need to be pre-sorted.
 export function groupByDate(transactions) {
   const groups = {}
   for (const t of transactions) {
-    const label = new Date(t.date).toLocaleDateString('en-GB', {
-      day: '2-digit', month: 'short', year: 'numeric',
-    })
+    const d = new Date(t.date)
+    const label = `${ordinalDay(d.getDate())} ${d.toLocaleDateString('en-GB', { month: 'long' })}`
     if (!groups[label]) groups[label] = []
     groups[label].push(t)
   }

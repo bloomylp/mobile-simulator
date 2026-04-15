@@ -1,13 +1,15 @@
 // src/components/transaction/TransactionList.jsx
 import { groupByDate } from '../../utils/filterTransactions.js'
 import { TransactionRow } from './TransactionRow.jsx'
+import { useLang } from '../../context/LangContext.jsx'
 
 export function TransactionList({ transactions }) {
+  const { t } = useLang()
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-5 text-center">
-        <p className="text-[#6B7280] text-sm font-medium">No transactions found</p>
-        <p className="text-[#6B7280] text-xs mt-1">Try adjusting the date range</p>
+        <p className="text-[#6B7280] text-sm font-medium">{t.noTrips}</p>
+        <p className="text-[#6B7280] text-xs mt-1">{t.adjustDate}</p>
       </div>
     )
   }

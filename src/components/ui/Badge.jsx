@@ -1,16 +1,18 @@
 // src/components/ui/Badge.jsx
-import { Clock, Snowflake } from 'lucide-react'
+import { Clock, Snowflake, Sparkles } from 'lucide-react'
 
 const styles = {
   active:  'bg-[#E8F7F0] text-[#1A7A50]',
   pending: 'bg-yellow-50 text-yellow-700',
   frozen:  'bg-blue-50 text-blue-700',
+  new:     'bg-[#E8F7F0] text-[#1A7A50]',
 }
 
 const labels = {
   active:  'Active',
   pending: 'Pending',
   frozen:  'Frozen',
+  new:     'New',
 }
 
 export function Badge({ status }) {
@@ -27,6 +29,7 @@ export function Badge({ status }) {
       )}
       {status === 'pending' && <Clock size={10} aria-hidden="true" />}
       {status === 'frozen'  && <Snowflake size={10} aria-hidden="true" />}
+      {status === 'new'     && <Sparkles size={10} aria-hidden="true" />}
       {label}
     </span>
   )

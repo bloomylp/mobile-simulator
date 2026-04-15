@@ -1,21 +1,25 @@
 // src/components/transaction/TransactionRow.jsx
-import { Bus, Train, TramFront, Zap } from 'lucide-react'
+import { Bus, Train, TramFront, Wallet, Zap } from 'lucide-react'
 
 const TYPE_ICON = {
   bus:   Bus,
   metro: Zap,
   rail:  Train,
   tram:  TramFront,
+  topup: Wallet,
 }
 
 const TYPE_LABEL = {
-  bus: 'Bus', metro: 'Metro', rail: 'Rail', tram: 'Tram',
+  bus: 'Bus', metro: 'Metro', rail: 'Rail', tram: 'Tram', topup: 'Top Up',
 }
 
 export function TransactionRow({ transaction: t }) {
   const Icon = TYPE_ICON[t.type] ?? Bus
   const time = new Date(t.date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-  const amount = `−£${Math.abs(t.amount).toFixed(2)}`
+  const isTopUp = t.type === 'topup'
+  const amount = isTopUp
+    ? `+$${t.amount.toFixed(2)}`
+    : `−$${Math.abs(t.amount).toFixed(2)}`
 
   return (
     <div className="flex items-center gap-3 px-5 py-3.5 border-b border-gray-50 last:border-0">
@@ -37,9 +41,11 @@ export function TransactionRow({ transaction: t }) {
 
       {/* Right side */}
       <div className="text-right flex-shrink-0">
-        <p className="text-[#1A1F2E] text-sm font-semibold tabular-nums">{amount}</p>
+        <p className={`text-sm font-semibold tabular-nums ${isTopUp ? 'text-[#2DB87E]' : 'text-[#1A1F2E]'}`}>
+          {amount}
+        </p>
         <span className="text-[10px] font-medium text-[#2DB87E] bg-[#E8F7F0] px-1.5 py-0.5 rounded-full">
-          Complete Trip
+          {isTopUp ? 'Money Loaded' : 'Complete Trip'}
         </span>
       </div>
     </div>
