@@ -35,7 +35,7 @@ export function buildNewCard(cardType = 'digital') {
   const last4 = String(1000 + seq * 37).slice(-4)
   const panSuffix = String(Math.floor(10000 + Math.random() * 90000))
   return {
-    id: `card-new-${Date.now()}`,
+    id: `card-new-${Date.now()}-${seq}`,
     name: 'John Smith',
     pan: `•••• •••• •••• ${last4}`,
     panFull: `0000 0000 0000 ${last4}`,
