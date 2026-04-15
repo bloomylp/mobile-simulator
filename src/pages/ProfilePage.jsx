@@ -71,7 +71,7 @@ export function ProfilePage() {
 
       {/* Menu */}
       <div className="mx-5 mt-4 bg-white rounded-2xl shadow-sm overflow-hidden divide-y divide-gray-100">
-        <MenuItem icon={BadgePercent} label="Enrol for Concession" onClick={() => {}} />
+        <MenuItem icon={BadgePercent} label="Enrol for Concession" onClick={() => navigate('/enrolment')} />
         <MenuItem icon={Languages} label={t.language} onClick={() => {}} />
         <MenuItem icon={Info} label={t.privacyPolicy} onClick={() => {}} />
         <MenuItem icon={LogOut} label={t.logOut} onClick={handleLogout} danger />
