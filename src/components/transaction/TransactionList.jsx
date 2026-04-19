@@ -8,8 +8,8 @@ export function TransactionList({ transactions }) {
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-5 text-center">
-        <p className="text-[#6B7280] text-sm font-medium">{t.noTrips}</p>
-        <p className="text-[#6B7280] text-xs mt-1">{t.adjustDate}</p>
+        <p className="text-[#1A1F2E] text-sm font-semibold">{t.noTrips}</p>
+        <p className="text-[#6B7280] text-xs mt-1">{t.noTripsDetail}</p>
       </div>
     )
   }

@@ -28,7 +28,7 @@ export function EnrolmentIntroPage() {
       </div>
 
       {/* Card */}
-      <div className="mx-5 bg-white rounded-2xl shadow-sm p-6 flex flex-col items-center gap-4">
+      <div className="mx-5 bg-white rounded-2xl shadow-sm p-6 pb-16 flex flex-col items-center gap-4">
         <h2 className="text-[#1A1F2E] text-base font-bold text-center">Concession Enrolment</h2>
         <p className="text-[#1A1F2E] text-xl font-bold">
           little<span className="text-[#2DB87E]">pay</span>
@@ -37,7 +37,7 @@ export function EnrolmentIntroPage() {
           Please take a few minutes to complete the verification and enrolment process.
         </p>
 
-        <ol className="w-full flex flex-col gap-3 mt-2">
+        <ol className="w-full flex flex-col gap-3 mt-2 translate-y-[14px]">
           {STEPS_OVERVIEW.map(({ n, title, desc }) => (
             <li key={n} className="flex gap-3 items-start">
               <div className="w-6 h-6 rounded-md border border-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -51,16 +51,18 @@ export function EnrolmentIntroPage() {
           ))}
         </ol>
 
-        <Button className="w-full mt-2" onClick={() => navigate('/enrolment/step-1')}>
-          Start Enrolment
-        </Button>
+        <div className="w-full translate-y-[50px]">
+          <Button className="w-full mt-2" onClick={() => navigate('/enrolment/step-1')}>
+            Start Enrolment
+          </Button>
 
-        <button
-          className="text-[#2DB87E] text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E] rounded min-h-[44px]"
-          onClick={() => {}}
-        >
-          Privacy policy
-        </button>
+          <button
+            className="w-full text-[#2DB87E] text-sm font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E] rounded min-h-[44px]"
+            onClick={() => {}}
+          >
+            Privacy policy
+          </button>
+        </div>
       </div>
     </div>
   )

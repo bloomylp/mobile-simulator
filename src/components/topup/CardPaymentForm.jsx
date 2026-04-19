@@ -69,7 +69,7 @@ export function CardPaymentForm({ amount, onSuccess }) {
           />
           {errors.expiry && <p id="err-expiry" className="text-[#DC2626] text-xs" role="alert">{errors.expiry}</p>}
         </div>
-        <div className="flex flex-col gap-1 flex-1">
+        <div className="flex flex-col gap-1 w-20 shrink-0">
           <label htmlFor="pay-cvv" className="text-sm font-medium text-[#1A1F2E]">CVV</label>
           <input
             id="pay-cvv"
@@ -82,7 +82,7 @@ export function CardPaymentForm({ amount, onSuccess }) {
             onChange={(e) => update('cvv', e.target.value.replace(/\D/g, '').slice(0, 4))}
             aria-describedby={errors.cvv ? 'err-cvv' : undefined}
             aria-invalid={!!errors.cvv}
-            className={`border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB87E] transition-shadow ${errors.cvv ? 'border-[#DC2626]' : 'border-gray-200'}`}
+            className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB87E] transition-shadow ${errors.cvv ? 'border-[#DC2626]' : 'border-gray-200'}`}
           />
           {errors.cvv && <p id="err-cvv" className="text-[#DC2626] text-xs" role="alert">{errors.cvv}</p>}
         </div>

@@ -1,5 +1,5 @@
 // src/components/topup/TopUpSheet.jsx
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { X, CheckCircle2 } from 'lucide-react'
 import { CardPaymentForm } from './CardPaymentForm.jsx'
 import { ApplePayButton }  from './ApplePayButton.jsx'

@@ -135,7 +135,7 @@ export function CardTypeModal({ onConfirm, onClose }) {
           disabled={!selected}
           onClick={() => onConfirm(selected)}
         >
-          Order {selected ? (selected === 'physical' ? 'Physical' : 'Digital') : ''} Card
+          {selected === 'digital' ? 'Add Card to Wallet' : selected === 'physical' ? 'Order Physical Card' : 'Order Card'}
         </Button>
       </div>
     </div>

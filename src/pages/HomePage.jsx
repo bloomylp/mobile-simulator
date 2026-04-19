@@ -1,5 +1,5 @@
 // src/pages/HomePage.jsx
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { SlidersHorizontal } from 'lucide-react'
 import { PageShell }          from '../components/layout/PageShell.jsx'
 import { CardChip }           from '../components/card/CardChip.jsx'
@@ -8,31 +8,34 @@ import { TransactionList }    from '../components/transaction/TransactionList.js
 import { TopUpSheet }         from '../components/topup/TopUpSheet.jsx'
 import { Button }             from '../components/ui/Button.jsx'
 import { cards }              from '../data/cards.js'
-import { getExtraCards, topUpCard, getCardBalance, getCardActive } from '../utils/cardsStore.js'
+import { useCardsStore, topUpCard, getCardBalance, getCardActive, addTopUpTx } from '../utils/cardsStore.js'
+import { HamburgerMenu }    from '../components/layout/HamburgerMenu.jsx'
 import { transactions }       from '../data/transactions.js'
 import { filterTransactions } from '../utils/filterTransactions.js'
 import { useLang }            from '../context/LangContext.jsx'
 import { LangToggle }         from '../components/ui/LangToggle.jsx'
+import { NotificationBell }  from '../components/ui/NotificationBell.jsx'
 
 export function HomePage() {
-  // Recompute on each mount so newly ordered cards appear after navigating back
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const allCards = useMemo(() => [...cards, ...getExtraCards()], [])
+  const state = useCardsStore()
+  const allCards = [
+    ...cards.filter((c) => !state.deletedSeedIds.has(c.id)),
+    ...state.extraCards,
+  ]
   const [showTopUp, setShowTopUp]     = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [dateRange, setDateRange]     = useState({ fromDate: '', toDate: '' })
-  const [txList, setTxList]           = useState(() => [...transactions])
   const [activeIdx, setActiveIdx]     = useState(0)
-  const [balances, setBalances] = useState(() =>
-    Object.fromEntries(allCards.map((c) => [c.id, getCardBalance(c.id, c.balance)]))
-  )
   const scrollRef = useRef(null)
   const dragRef   = useRef({ down: false, startX: 0, startScroll: 0 })
 
   const { t } = useLang()
-  const activeCard    = allCards[activeIdx] ?? allCards[0]
-  const activeBalance = balances[activeCard.id] ?? activeCard.balance
-  const filtered      = filterTransactions(txList, dateRange.fromDate, dateRange.toDate)
+  const safeIdx = Math.min(activeIdx, Math.max(0, allCards.length - 1))
+  const activeCard = allCards[safeIdx]
+  const activeBalance = activeCard ? getCardBalance(activeCard.id, activeCard.balance) : 0
+  const txList = [...state.topUpTxList, ...transactions]
+  const cardTxs = activeCard ? txList.filter((tx) => tx.cardId === activeCard.id) : []
+  const filtered = filterTransactions(cardTxs, dateRange.fromDate, dateRange.toDate)
 
   function handleScroll() {
     const el = scrollRef.current
@@ -57,7 +60,6 @@ export function HomePage() {
     if (!dragRef.current.down) return
     dragRef.current.down = false
     const el = scrollRef.current
-    // Snap to nearest card
     const cardWidth = el.offsetWidth
     const nearest = Math.round(el.scrollLeft / cardWidth)
     el.style.scrollSnapType = ''
@@ -65,26 +67,26 @@ export function HomePage() {
   }
 
   function handleTopUp(amount) {
+    if (!activeCard) return
     const cardId = activeCard.id
     topUpCard(cardId, amount)
-    setBalances((prev) => ({ ...prev, [cardId]: (prev[cardId] ?? activeCard.balance) + amount }))
-
     const now  = new Date()
     const pad  = (n) => String(n).padStart(2, '0')
     const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
-    setTxList((prev) => [
-      { id: `topup-${Date.now()}`, date, type: 'topup', route: '', operator: 'Money Loaded', status: 'complete', amount, discounted: false },
-      ...prev,
-    ])
+    const tx = { id: `topup-${Date.now()}`, cardId, date, type: 'topup', route: '', operator: 'Balance Loaded', status: 'complete', amount, discounted: false }
+    addTopUpTx(tx)
   }
 
   return (
-    <PageShell className="pb-20">
+    <PageShell>
       {/* ── Green header ── */}
       <div style={{ background: 'linear-gradient(160deg, #2DB87E 0%, #1A7A50 100%)' }}>
-        <div className="flex items-center justify-between px-5 pt-10 pb-4">
-          <p className="text-white/80 text-sm font-medium">{t.welcome}</p>
-          <LangToggle light />
+        <div className="relative flex items-center justify-between px-5 pt-10 pb-4">
+          <HamburgerMenu light />
+<div className="flex items-center gap-[5px]">
+            <LangToggle light />
+            <NotificationBell light />
+          </div>
         </div>
 
         {/* Card carousel */}
@@ -102,7 +104,7 @@ export function HomePage() {
               <div className="relative">
                 <CardChip
                   card={card}
-                  cardLabel={i === 0 ? 'Primary Card' : 'Additional Card'}
+                  cardLabel={i === 0 ? 'Primary Card' : card.cardType === 'physical' ? 'Physical Card' : 'Digital Card'}
                   displayPan={`*******${card.panSuffix ?? card.panFull.replace(/\s/g, '').slice(-5)}`}
                   isActive={getCardActive(card.id)}
                 />
@@ -125,7 +127,7 @@ export function HomePage() {
               <div
                 key={i}
                 className={`rounded-full transition-all duration-200 ${
-                  i === activeIdx ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40'
+                  i === safeIdx ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40'
                 }`}
               />
             ))}
@@ -146,6 +148,7 @@ export function HomePage() {
             variant="secondary"
             className="w-full bg-white/15 text-white border-white/30 hover:bg-white/25"
             onClick={() => setShowTopUp(true)}
+            disabled={!activeCard}
           >
             {t.loadMoney}
           </Button>

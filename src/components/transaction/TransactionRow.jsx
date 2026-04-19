@@ -45,7 +45,7 @@ export function TransactionRow({ transaction: t }) {
           {amount}
         </p>
         <span className="text-[10px] font-medium text-[#2DB87E] bg-[#E8F7F0] px-1.5 py-0.5 rounded-full">
-          {isTopUp ? 'Money Loaded' : 'Complete Trip'}
+          {isTopUp ? 'Balance Loaded' : 'Complete Trip'}
         </span>
       </div>
     </div>

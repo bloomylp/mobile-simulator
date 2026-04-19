@@ -1,90 +1,18 @@
 // src/components/card/CardActions.jsx
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Eye, EyeOff, Settings } from 'lucide-react'
 
-function AppleWalletOverlay({ onDone }) {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    // Trigger slide-up on next frame
-    const showTimer = requestAnimationFrame(() => setVisible(true))
-    // Slide back down after 2s, then call onDone
-    const hideTimer = setTimeout(() => setVisible(false), 3000)
-    const doneTimer = setTimeout(onDone, 3450) // after slide-down finishes
-    return () => {
-      cancelAnimationFrame(showTimer)
-      clearTimeout(hideTimer)
-      clearTimeout(doneTimer)
-    }
-  }, [onDone])
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 80,
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        pointerEvents: 'none',
-      }}
-    >
-      <img
-        src="/apple_wallet.png"
-        alt="Apple Wallet"
-        style={{
-          width: '100%',
-          maxWidth: '390px',
-          transform: visible ? 'translateY(0)' : 'translateY(100%)',
-          transition: 'transform 0.45s cubic-bezier(0.32, 0.72, 0, 1)',
-          borderRadius: '24px 24px 0 0',
-          display: 'block',
-        }}
-        draggable="false"
-      />
-    </div>
-  )
-}
-
 function AddToWalletButton() {
-  const [state, setState] = useState('idle') // idle | animating | added
-
-  function handleClick() {
-    if (state !== 'idle') return
-    setState('animating')
-  }
-
-  function handleDone() {
-    setState('added')
-  }
-
   return (
-    <>
-      <button
-        onClick={handleClick}
-        disabled={state === 'added'}
-        className="w-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E] rounded-xl disabled:opacity-70 active:scale-95 transition-transform duration-150"
-        aria-label="Add to Apple Wallet"
-      >
-        {state === 'added' ? (
-          <div className="flex items-center justify-center gap-2 bg-black text-white rounded-xl py-3 text-sm font-semibold min-h-[50px]">
-            Added to Wallet
-          </div>
-        ) : (
-          <img
-            src="/wallet.png"
-            alt="Add to Apple Wallet"
-            width={155}
-            height={48}
-            className="rounded-xl"
-            draggable="false"
-          />
-        )}
-      </button>
-
-      {state === 'animating' && <AppleWalletOverlay onDone={handleDone} />}
-    </>
+    <button
+      disabled
+      aria-label="Added to Wallet"
+      className="w-full rounded-xl focus:outline-none disabled:opacity-70"
+    >
+      <div className="flex items-center justify-center bg-black text-white rounded-xl py-3 text-sm font-semibold min-h-[50px]">
+        Added to Wallet
+      </div>
+    </button>
   )
 }
 

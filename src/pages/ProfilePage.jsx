@@ -2,9 +2,13 @@
 import { useNavigate } from 'react-router-dom'
 import { Languages, Info, LogOut, MessageCircle, BadgePercent } from 'lucide-react'
 import { PageShell } from '../components/layout/PageShell.jsx'
-import { LangToggle } from '../components/ui/LangToggle.jsx'
-import { logout } from '../utils/auth.js'
+import { LangToggle }        from '../components/ui/LangToggle.jsx'
+import { NotificationBell } from '../components/ui/NotificationBell.jsx'
+import { HamburgerMenu }    from '../components/layout/HamburgerMenu.jsx'
+import { resetCardsStore } from '../utils/cardsStore.js'
 import { useLang } from '../context/LangContext.jsx'
+import { useConcession } from '../context/ConcessionContext.jsx'
+import { useNotifications } from '../context/NotificationsContext.jsx'
 
 const USER = {
   name: 'John Rotterwood',
@@ -30,23 +34,31 @@ function MenuItem({ icon: Icon, label, onClick, danger = false }) {
 export function ProfilePage() {
   const navigate = useNavigate()
   const { t } = useLang()
+  const { resetConcession } = useConcession()
+  const { resetNotifications } = useNotifications()
 
   function handleLogout() {
-    logout()
-    navigate('/login', { replace: true })
-  }
-
-  function handleReset() {
+    // Full reset — match HamburgerMenu so in-memory demo state doesn't leak
+    // across sessions regardless of where logout is triggered from.
+    resetConcession()
+    resetCardsStore()
+    resetNotifications()
     sessionStorage.clear()
     navigate('/login', { replace: true })
   }
 
+  const handleReset = handleLogout
+
   return (
-    <PageShell className="pb-24">
+    <PageShell>
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pt-12 pb-4">
-        <h1 className="text-[#1A1F2E] text-lg font-bold">{t.profile}</h1>
-        <LangToggle />
+      <div className="relative flex items-center justify-between px-5 pt-12 pb-4">
+        <HamburgerMenu />
+        <h1 className="absolute inset-x-0 text-center text-[#1A1F2E] text-lg font-bold pointer-events-none">{t.profile}</h1>
+        <div className="flex items-center gap-[5px]">
+          <LangToggle />
+          <NotificationBell />
+        </div>
       </div>
 
       {/* User card */}

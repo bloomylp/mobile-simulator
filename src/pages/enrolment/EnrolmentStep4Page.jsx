@@ -21,8 +21,10 @@ export function EnrolmentStep4Page() {
   const navigate = useNavigate()
   const { state } = useEnrolment()
   const { group, verified, card } = state
+  const canSubmit = Boolean(group && verified && card)
 
   function handleSubmit() {
+    if (!canSubmit) return
     navigate('/enrolment/complete')
   }
 
@@ -69,7 +71,7 @@ export function EnrolmentStep4Page() {
       </div>
 
       <div className="mt-auto px-5 pt-8 flex flex-col gap-3">
-        <Button className="w-full" onClick={handleSubmit} aria-label="Submit">
+        <Button className="w-full" disabled={!canSubmit} onClick={handleSubmit} aria-label="Submit">
           Submit Application
         </Button>
         <button

@@ -2,7 +2,7 @@
 export const cards = [
   {
     id: 'card-001',
-    name: 'John Smith',
+    name: 'John Rotterwood',
     pan: '122*******31230',
     panFull: '1220 0000 0031 230',
     panSuffix: '31230',

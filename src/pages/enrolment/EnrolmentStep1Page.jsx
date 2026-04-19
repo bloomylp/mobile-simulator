@@ -13,8 +13,8 @@ const GROUPS = [
 
 export function EnrolmentStep1Page() {
   const navigate = useNavigate()
-  const { setGroup } = useEnrolment()
-  const [selected, setSelected] = useState(null)
+  const { state, setGroup } = useEnrolment()
+  const [selected, setSelected] = useState(state.group ?? null)
 
   function handleContinue() {
     setGroup(selected)

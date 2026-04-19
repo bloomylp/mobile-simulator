@@ -7,30 +7,42 @@ import { CardChip }    from '../components/card/CardChip.jsx'
 import { CardActions } from '../components/card/CardActions.jsx'
 import { Badge }       from '../components/ui/Badge.jsx'
 import { cards }       from '../data/cards.js'
-import { getExtraCards, addExtraCard, buildNewCard, getCardActive, setCardActive } from '../utils/cardsStore.js'
+import {
+  useCardsStore,
+  addExtraCard,
+  buildNewCard,
+  getCardActive,
+  setCardActive,
+  deleteCard,
+  getCardBalance,
+} from '../utils/cardsStore.js'
 import { useLang }        from '../context/LangContext.jsx'
-import { LangToggle }     from '../components/ui/LangToggle.jsx'
-import { CardTypeModal }  from '../components/card/CardTypeModal.jsx'
-
-function randomLast4() {
-  return String(1000 + Math.floor(Math.random() * 9000))
-}
-function randomGroup() {
-  return String(1000 + Math.floor(Math.random() * 9000))
-}
+import { LangToggle }        from '../components/ui/LangToggle.jsx'
+import { NotificationBell } from '../components/ui/NotificationBell.jsx'
+import { HamburgerMenu }    from '../components/layout/HamburgerMenu.jsx'
+import { CardTypeModal }    from '../components/card/CardTypeModal.jsx'
 
 export function CardsPage() {
   const navigate = useNavigate()
   const { t } = useLang()
-  const [cardList, setCardList]   = useState(() => [...cards, ...getExtraCards()])
+  const state = useCardsStore()
+  const cardList = [
+    ...cards.filter((c) => !state.deletedSeedIds.has(c.id)),
+    ...state.extraCards,
+  ]
   const [managingId, setManagingId] = useState(null)
+  const [deletingIds, setDeletingIds] = useState(new Set())
   const [ordering, setOrdering]   = useState(false)
-  const [, forceRender] = useState(0)
   const [showTypeModal, setShowTypeModal] = useState(false)
-  const timerRef = useRef(null)
+  const orderTimerRef = useRef(null)
+  const deleteTimersRef = useRef(new Set())
   const orderingRef = useRef(false)
 
-  useEffect(() => () => clearTimeout(timerRef.current), [])
+  useEffect(() => () => {
+    clearTimeout(orderTimerRef.current)
+    deleteTimersRef.current.forEach((id) => clearTimeout(id))
+    deleteTimersRef.current.clear()
+  }, [])
 
   function handleOrderNew() {
     if (orderingRef.current) return
@@ -42,85 +54,94 @@ export function CardsPage() {
     orderingRef.current = true
     setShowTypeModal(false)
     setOrdering(true)
-    timerRef.current = setTimeout(() => {
+    orderTimerRef.current = setTimeout(() => {
       const newCard = buildNewCard(type)
       addExtraCard(newCard)
-      setCardList([...cards, ...getExtraCards()])
       orderingRef.current = false
       setOrdering(false)
-      navigate('/order-complete')
+      navigate('/order-complete', { state: { cardType: type } })
     }, 1500)
-  }
-
-  function handleRefresh(cardId) {
-    // Flip back first, then update card details after animation finishes
-    setManagingId(null)
-    setTimeout(() => {
-      const last4      = randomLast4()
-      const newPan     = `•••• •••• •••• ${last4}`
-      const newFull    = `${randomGroup()} ${randomGroup()} ${randomGroup()} ${last4}`
-      const newSuffix  = String(Math.floor(10000 + Math.random() * 90000))
-      const month      = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0')
-      const year       = String(new Date().getFullYear() + 2 + Math.floor(Math.random() * 4)).slice(-2)
-      setCardList((prev) =>
-        prev.map((c) =>
-          c.id === cardId
-            ? { ...c, pan: newPan, panFull: newFull, panSuffix: newSuffix, expiry: `${month}/${year}` }
-            : c
-        )
-      )
-    }, 570) // slightly after the 0.55s CSS transition
   }
 
   function handleDelete(cardId) {
     setManagingId(null)
-    setCardList((prev) => prev.filter((c) => c.id !== cardId))
+    setDeletingIds((prev) => new Set([...prev, cardId]))
+    const timer = setTimeout(() => {
+      deleteCard(cardId)
+      setDeletingIds((prev) => { const s = new Set(prev); s.delete(cardId); return s })
+      deleteTimersRef.current.delete(timer)
+    }, 400)
+    deleteTimersRef.current.add(timer)
   }
 
   return (
-    <PageShell className="pb-20">
+    <PageShell>
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pt-12 pb-4">
-        <h1 className="text-[#1A1F2E] text-lg font-bold">{t.yourCards} ({cardList.length})</h1>
-        <LangToggle />
+      <div className="relative flex items-center justify-between px-5 pt-12 pb-4">
+        <HamburgerMenu />
+        <h1 className="absolute inset-x-0 text-center text-[#1A1F2E] text-lg font-bold pointer-events-none">{t.yourCards} ({cardList.length})</h1>
+        <div className="flex items-center gap-[5px]">
+          <LangToggle />
+          <NotificationBell />
+        </div>
       </div>
 
       {/* Card list */}
-      <div className="flex flex-col gap-4 px-5">
+      <div className="flex flex-col px-5">
         {cardList.map((card) => {
           const managing = managingId === card.id
+          const deleting = deletingIds.has(card.id)
+          const active = getCardActive(card.id)
           return (
-            <div key={card.id} className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-3">
+            <div
+              key={card.id}
+              data-card-container
+              data-deleting={deleting ? 'true' : undefined}
+              style={{
+                overflow: 'hidden',
+                maxHeight: deleting ? '0' : '600px',
+                marginBottom: deleting ? '0' : '16px',
+                transition: 'max-height 0.35s ease 0.15s, margin-bottom 0.35s ease 0.15s',
+              }}
+            >
+            <div
+              style={{
+                opacity: deleting ? 0 : 1,
+                transform: deleting ? 'translateX(-24px) scale(0.97)' : 'none',
+                transition: 'opacity 0.2s ease, transform 0.2s ease',
+              }}
+              className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-3">
               <div className="flex items-center justify-between mb-1">
-                <Badge status={card.status} />
+                {card.status === 'new' ? <Badge status="new" /> : <span />}
                 {/* Active / Deactivated toggle */}
                 <button
                   role="switch"
-                  aria-checked={getCardActive(card.id)}
-                  onClick={() => { setCardActive(card.id, !getCardActive(card.id)); forceRender((n) => n + 1) }}
+                  aria-checked={active}
+                  onClick={() => setCardActive(card.id, !active)}
                   className="flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E] rounded-full"
                 >
-                  <span className={`text-xs font-medium transition-colors duration-150 ${getCardActive(card.id) ? 'text-[#2DB87E]' : 'text-[#6B7280]'}`}>
-                    {getCardActive(card.id) ? 'Active' : 'Deactivated'}
+                  <span className={`text-xs font-medium transition-colors duration-150 ${active ? 'text-[#2DB87E]' : 'text-[#6B7280]'}`}>
+                    {active ? 'Active' : 'Deactivated'}
                   </span>
-                  <div className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${getCardActive(card.id) ? 'bg-[#2DB87E]' : 'bg-[#D1D5DB]'}`}>
-                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${getCardActive(card.id) ? 'translate-x-4' : 'translate-x-0'}`} />
+                  <div className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${active ? 'bg-[#2DB87E]' : 'bg-[#D1D5DB]'}`}>
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${active ? 'translate-x-4' : 'translate-x-0'}`} />
                   </div>
                 </button>
               </div>
               <CardChip
                 card={card}
                 displayPan={`*******${card.panSuffix ?? card.panFull.replace(/\s/g, '').slice(-5)}`}
+                balance={getCardBalance(card.id, card.balance)}
                 flipped={managing}
-                isActive={getCardActive(card.id)}
+                isActive={active}
                 onFlipBack={() => setManagingId(null)}
-                onRefresh={() => handleRefresh(card.id)}
                 onDelete={() => handleDelete(card.id)}
               />
               <CardActions
                 card={card}
-                onManage={() => setManagingId(card.id)}
+                onManage={() => setManagingId(managing ? null : card.id)}
               />
+            </div>
             </div>
           )
         })}

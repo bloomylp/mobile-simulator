@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react'
 
 export const translations = {
   en: {
-    welcome:        'Welcome to Traveller Wallet',
+    welcome:        'Your Traveller Wallet',
     transactions:   'Transactions',
     loadMoney:      'Load Balance',
     balance:        'Balance',
@@ -25,8 +25,18 @@ export const translations = {
     leaveUs:        'Leave Us',
     accountCreated: 'Account Created',
     ordering:       'Ordering\u2026',
-    noTrips:        'No transactions found',
+    noTrips:        'No trips',
+    noTripsDetail:  'or balance loading completed.',
     adjustDate:     'Try adjusting the date range',
+    concession:     'Concession',
+    promotions:     'Promotions',
+    helpCentre:     'Help Centre',
+    generalInfo:    'General Information',
+    helpBody:       'If you experience any issues, please contact us using the details below. Our support team is here to help you resolve any problems as quickly as possible.',
+    contactUs:      'Contact Us',
+    privacyPolicyLink:'Privacy Policy',
+    termsConditions:'Terms & Conditions',
+    refundPolicy:   'Refund Policy',
   },
   es: {
     welcome:        'Bienvenido a Traveller Wallet',
@@ -51,8 +61,18 @@ export const translations = {
     leaveUs:        'Déjanos',
     accountCreated: 'Cuenta Creada',
     ordering:       'Pidiendo\u2026',
-    noTrips:        'No se encontraron transacciones',
+    noTrips:        'Sin viajes',
+    noTripsDetail:  'o carga de saldo completada.',
     adjustDate:     'Intenta ajustar el rango de fechas',
+    concession:     'Concesión',
+    promotions:     'Promociones',
+    helpCentre:     'Centro de Ayuda',
+    generalInfo:    'Información General',
+    helpBody:       'Si experimenta algún problema, comuníquese con nosotros usando los datos a continuación. Nuestro equipo de soporte está aquí para ayudarle a resolver cualquier problema lo más rápido posible.',
+    contactUs:      'Contáctenos',
+    privacyPolicyLink:'Política de Privacidad',
+    termsConditions:'Términos y Condiciones',
+    refundPolicy:   'Política de Reembolso',
   },
 }
 

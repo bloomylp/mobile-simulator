@@ -11,9 +11,9 @@ import { getExtraCards } from '../../utils/cardsStore.js'
 
 export function EnrolmentStep3Page() {
   const navigate = useNavigate()
-  const { setCard } = useEnrolment()
+  const { state, setCard } = useEnrolment()
   const [showModal, setShowModal] = useState(false)
-  const [selectedCard, setSelectedCard] = useState(null)
+  const [selectedCard, setSelectedCard] = useState(state.card ?? null)
 
   const availableCards = [...allCards, ...getExtraCards()]
 

@@ -48,7 +48,7 @@ describe('EnrolmentStep3Page', () => {
     await user.click(screen.getByLabelText(/ending/i))
     await user.click(screen.getByRole('button', { name: /confirm/i }))
     expect(screen.queryByText(/Select a Card/i)).not.toBeInTheDocument()
-    expect(screen.getByText(/John Smith/i)).toBeInTheDocument()
+    expect(screen.getByText(/John Rotterwood/i)).toBeInTheDocument()
   })
 
   test('Continue disabled until card selected', () => {

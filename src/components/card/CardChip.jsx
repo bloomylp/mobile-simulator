@@ -1,5 +1,5 @@
 // src/components/card/CardChip.jsx
-import { RefreshCw, Trash2, X } from 'lucide-react'
+import { Trash2, X } from 'lucide-react'
 
 const STATUS_LABEL = { active: 'Active', pending: 'Pending', frozen: 'Frozen', new: 'New' }
 
@@ -13,10 +13,10 @@ export function CardChip({
   showStatus  = false,
   cardLabel   = 'Primary Card',
   displayPan  = null,
+  balance     = 0,
   flipped     = false,
   isActive    = true,
   onFlipBack,
-  onRefresh,
   onDelete,
 }) {
   const frontGrad = isActive ? FRONT_GRAD : FRONT_GRAD_OFF
@@ -25,7 +25,7 @@ export function CardChip({
     <div style={{ perspective: '1200px' }}>
       <div
         role="region"
-        aria-label={`${card.status} card ending ${card.pan.slice(-4)}`}
+        aria-label={`${card.status} card ending ${(card.panSuffix ?? card.panFull?.replace(/\s/g, '') ?? '').slice(-4)}`}
         style={{
           position:        'relative',
           height:          '160px',
@@ -58,7 +58,11 @@ export function CardChip({
           </div>
 
           <div className="relative mb-3">
-            <p className="text-white font-semibold text-lg leading-tight invisible">{card.name}</p>
+            {balance > 0 ? (
+              <p className="text-white font-mono text-sm tracking-widest">Balance ${balance.toFixed(2)}</p>
+            ) : (
+              <p className="text-white font-mono text-sm invisible">Balance $0.00</p>
+            )}
           </div>
 
           <div className="relative flex items-end justify-between">
@@ -88,7 +92,7 @@ export function CardChip({
           <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-10 bg-white" />
           <div className="absolute -bottom-6 -left-6 w-28 h-28 rounded-full opacity-10 bg-white" />
 
-          <div className="relative flex justify-end mb-1" style={{ marginTop: '-5px' }}>
+          <div className="relative flex justify-end" style={{ marginTop: '-5px' }}>
             <button
               onClick={onFlipBack}
               className="text-white/60 hover:text-white rounded-full p-1 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors duration-150"
@@ -98,17 +102,10 @@ export function CardChip({
             </button>
           </div>
 
-          <div className="relative flex flex-col gap-2.5" style={{ marginTop: '0px' }}>
-            <button
-              onClick={onRefresh}
-              className="flex items-center justify-center gap-2 w-full bg-white/20 hover:bg-white/30 text-white text-sm font-semibold rounded-xl py-2.5 cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white min-h-[44px]"
-            >
-              <RefreshCw size={14} aria-hidden="true" />
-              Refresh card
-            </button>
+          <div className="relative flex items-center justify-center" style={{ marginTop: '14px' }}>
             <button
               onClick={onDelete}
-              className="flex items-center justify-center gap-2 w-full bg-white hover:bg-red-50 text-[#DC2626] text-sm font-semibold rounded-xl py-2.5 cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 min-h-[44px]"
+              className="flex items-center justify-center gap-2 bg-white hover:bg-red-50 text-[#DC2626] text-sm font-semibold rounded-xl px-6 py-2.5 cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 min-h-[44px]"
             >
               <Trash2 size={14} className="text-[#DC2626]" aria-hidden="true" />
               Delete card

@@ -1,6 +1,7 @@
 // src/components/enrolment/SheerIDModal.jsx
 import { useState } from 'react'
 import { X, CheckCircle } from 'lucide-react'
+import { Button } from '../ui/Button.jsx'
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const EMPTY_FORM = { firstName: '', lastName: '', month: '', day: '', year: '', postalCode: '', email: '' }
@@ -42,17 +43,22 @@ export function SheerIDModal({ onVerified, onClose }) {
       </div>
 
       {verified ? (
-        <div className="flex flex-col items-center justify-center flex-1 gap-4 px-6 py-12 text-center">
-          <CheckCircle size={56} className="text-gray-300" strokeWidth={1.25} />
-          <h3 className="text-[#1A1F2E] text-lg font-bold">You've been verified</h3>
-          <p className="text-[#6B7280] text-sm">Thank you for completing</p>
-          <p className="text-[#6B7280] text-sm mt-2">
-            If you have any questions contact us{' '}
-            <span className="text-[#2DB87E]">support@littlepay.com</span>
-          </p>
-          <p className="text-[#9CA3AF] text-xs mt-4 max-w-xs">
-            SheerID handles verification only. Now that you've been approved, please direct all questions about the promotion terms to Littlepay customer service.
-          </p>
+        <div className="flex flex-col flex-1 px-6 py-12">
+          <div className="flex flex-col items-center text-center gap-4 flex-1">
+            <CheckCircle size={56} className="text-gray-300" strokeWidth={1.25} />
+            <h3 className="text-[#1A1F2E] text-lg font-bold">You've been verified</h3>
+            <p className="text-[#6B7280] text-sm">Thank you for completing</p>
+            <p className="text-[#6B7280] text-sm mt-2">
+              If you have any questions contact us{' '}
+              <span className="text-[#2DB87E]">support@littlepay.com</span>
+            </p>
+            <p className="text-[#9CA3AF] text-xs mt-4 max-w-xs">
+              SheerID handles verification only. Now that you've been approved, please direct all questions about the promotion terms to Littlepay customer service.
+            </p>
+          </div>
+          <Button className="w-full mt-8 -translate-y-[20px]" onClick={onVerified}>
+            Continue
+          </Button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-5 py-6 flex-1">
@@ -147,13 +153,6 @@ export function SheerIDModal({ onVerified, onClose }) {
               autoComplete="email"
             />
           </div>
-
-          <label className="flex items-start gap-2 cursor-pointer">
-            <input type="checkbox" className="mt-0.5 accent-[#2DB87E]" />
-            <span className="text-[#6B7280] text-xs">
-              Yes, send me Littlepay marketing communications about exclusive sales, special offers, latest products and more
-            </span>
-          </label>
 
           <button
             type="submit"
