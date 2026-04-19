@@ -1,4 +1,6 @@
-# LittlePay Traveller Wallet
+# mobile-simulator
+
+LittlePay Traveller Wallet — iOS + Android device simulator.
 
 Mobile-responsive React SPA demo — digital card issuance, spend dashboard, transit transaction history, top-up flow, concession enrolment, and an Android (Pixel 10) platform view with Littlobus transit-pass flow.
 
