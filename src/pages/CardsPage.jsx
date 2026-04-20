@@ -87,7 +87,7 @@ export function CardsPage() {
       </div>
 
       {/* Card list */}
-      <div className="flex flex-col px-5">
+      <div className={`flex flex-col px-5 ${cardList.length >= 3 ? 'pb-32' : 'pb-6'}`}>
         {cardList.map((card) => {
           const managing = managingId === card.id
           const deleting = deletingIds.has(card.id)
