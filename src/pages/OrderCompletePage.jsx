@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { NotificationBell } from '../components/ui/NotificationBell.jsx'
 import { LangToggle }       from '../components/ui/LangToggle.jsx'
 import { Button }           from '../components/ui/Button.jsx'
+import { HamburgerMenu }    from '../components/layout/HamburgerMenu.jsx'
 
 // ── iOS-style chevron ──────────────────────────────────────────────
 function Chevron() {
@@ -153,7 +154,7 @@ function IosButton({ label, onClick }) {
 // ── Step 1: Add to Wallet ──────────────────────────────────────────
 function AddToWalletStep({ onNext }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F2F2F7', padding: '120px 20px 32px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100%', background: '#F2F2F7', padding: '88px 20px 32px' }}>
       {/* Heading */}
       <h1 style={{ fontSize: 28, fontWeight: 700, color: '#000', margin: '0 0 6px', letterSpacing: '-0.5px' }}>
         Add to Wallet
@@ -220,7 +221,7 @@ function TravelCardStep({ onContinue }) {
   const [selectedId, setSelectedId] = useState(null)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#F2F2F7', padding: '120px 20px 32px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100%', background: '#F2F2F7', padding: '88px 20px 32px' }}>
       {/* Heading */}
       <h1 style={{ fontSize: 28, fontWeight: 700, color: '#000', margin: '0 0 6px', letterSpacing: '-0.5px' }}>
         Travel Card
@@ -354,13 +355,20 @@ export function OrderCompletePage() {
   const isDigital = location.state?.cardType === 'digital'
   const [step, setStep] = useState(1)
 
+  const navBar = (
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '48px 16px 8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <HamburgerMenu />
+        <LangToggle />
+      </div>
+      <NotificationBell />
+    </div>
+  )
+
   if (!isDigital) {
     return (
       <div style={{ minHeight: '100%', background: '#F4F6F8', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 41, right: 16, display: 'flex', alignItems: 'center', gap: 5, zIndex: 10 }}>
-          <LangToggle />
-          <NotificationBell />
-        </div>
+        {navBar}
         <PhysicalOrderComplete onContinue={() => navigate('/cards')} />
       </div>
     )
@@ -368,11 +376,7 @@ export function OrderCompletePage() {
 
   return (
     <div style={{ minHeight: '100%', background: '#F2F2F7', position: 'relative', overflow: 'hidden' }}>
-      {/* Utilities top-right */}
-      <div style={{ position: 'absolute', top: 41, right: 16, display: 'flex', alignItems: 'center', gap: 5, zIndex: 10 }}>
-        <LangToggle />
-        <NotificationBell />
-      </div>
+      {navBar}
 
       {/* Active step — slide in from right when step changes */}
       <div
