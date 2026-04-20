@@ -32,8 +32,10 @@ dist-ssr
 # Reference images / assets not for version control
 GTI/
 Pass/
+concession/
 images/
 login.png
 apple_wallet.png
 wallet.png
+help_centre.png
 2d97b14e-f559-409c-9c7a-b7c8267d0dde.png
