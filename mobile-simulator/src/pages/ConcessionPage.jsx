@@ -131,8 +131,8 @@ export function ConcessionPage() {
       <h2 className="text-[#1A1F2E] text-base font-bold mb-4 px-1">Active ({concessions.length})</h2>
 
       <div className="flex flex-col gap-4">
-        {concessions.map((c, i) => (
-          <ConcessionCard key={i} group={c.group} card={c.card} enrolledAt={c.enrolledAt} />
+        {concessions.map((c) => (
+          <ConcessionCard key={c.enrolledAt} group={c.group} card={c.card} enrolledAt={c.enrolledAt} />
         ))}
       </div>
 

@@ -1,4 +1,4 @@
-// Screen — Processing animation, auto-advances to pass-detail after 2s.
+// Screen — Processing animation, auto-advances to pass-detail after 3s.
 import { useEffect } from 'react'
 import { useWalletFlow } from '../WalletFlowContext.jsx'
 import { AppSurface, TEXT_PRIMARY } from '../ui/primitives.jsx'
@@ -21,6 +21,9 @@ export function ProcessingScreen() {
       goTo('pass-detail')
     }, 3000)
     return () => clearTimeout(t)
+  // goTo and addPass are inline functions in WalletFlowProvider (stable state setters);
+  // selectedPass is fixed at navigate time and won't change while this screen mounts.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

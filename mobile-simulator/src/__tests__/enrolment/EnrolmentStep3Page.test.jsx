@@ -66,6 +66,34 @@ describe('EnrolmentStep3Page', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/enrolment/step-4')
   })
 
+  test('completing "Add a new card" form and confirming closes modal and shows card as selected', async () => {
+    const user = userEvent.setup()
+    renderStep3()
+    await user.click(screen.getByRole('button', { name: /select card/i }))
+    await user.click(screen.getByLabelText('Add a new card'))
+    await user.type(screen.getByLabelText('Name'), 'Jane Smith')
+    await user.type(screen.getByLabelText('Card Number'), '4111111111111111')
+    await user.type(screen.getByLabelText('Expiry'), '1228')
+    await user.type(screen.getByLabelText('CVV'), '123')
+    await user.click(screen.getByRole('button', { name: /confirm/i }))
+    expect(screen.queryByText(/Select a Card/i)).not.toBeInTheDocument()
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument()
+    expect(screen.getByText(/1111/)).toBeInTheDocument()
+  })
+
+  test('after "Add a new card" confirm, Continue is enabled', async () => {
+    const user = userEvent.setup()
+    renderStep3()
+    await user.click(screen.getByRole('button', { name: /select card/i }))
+    await user.click(screen.getByLabelText('Add a new card'))
+    await user.type(screen.getByLabelText('Name'), 'Jane Smith')
+    await user.type(screen.getByLabelText('Card Number'), '4111111111111111')
+    await user.type(screen.getByLabelText('Expiry'), '1228')
+    await user.type(screen.getByLabelText('CVV'), '123')
+    await user.click(screen.getByRole('button', { name: /confirm/i }))
+    expect(screen.getByRole('button', { name: /continue/i })).not.toBeDisabled()
+  })
+
   test('"Previous Step" navigates to step-2', async () => {
     const user = userEvent.setup()
     renderStep3()

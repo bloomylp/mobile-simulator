@@ -5,6 +5,7 @@ import { CheckCircle } from 'lucide-react'
 import { Button } from '../../components/ui/Button.jsx'
 import { useEnrolment } from '../../context/EnrolmentContext.jsx'
 import { useConcession } from '../../context/ConcessionContext.jsx'
+import { addExtraCard } from '../../utils/cardsStore.js'
 
 export function EnrolmentCompletePage() {
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ export function EnrolmentCompletePage() {
   function handleDone() {
     if (!isComplete) return
     doneClicked.current = true
+    if (state.pendingCard) addExtraCard(state.pendingCard)
     setConcessionData(state.group, state.card)
     setEnrolled(true)
     resetEnrolment()

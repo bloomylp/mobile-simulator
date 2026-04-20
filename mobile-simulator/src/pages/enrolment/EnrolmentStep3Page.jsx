@@ -11,7 +11,7 @@ import { getExtraCards } from '../../utils/cardsStore.js'
 
 export function EnrolmentStep3Page() {
   const navigate = useNavigate()
-  const { state, setCard } = useEnrolment()
+  const { state, setCard, setPendingCard } = useEnrolment()
   const [showModal, setShowModal] = useState(false)
   const [selectedCard, setSelectedCard] = useState(state.card ?? null)
 
@@ -21,6 +21,13 @@ export function EnrolmentStep3Page() {
     const card = availableCards.find(c => c.id === cardId)
     setSelectedCard(card)
     setCard(card)
+    setShowModal(false)
+  }
+
+  function handleNewCard(card) {
+    setSelectedCard(card)
+    setCard(card)
+    setPendingCard(card)
     setShowModal(false)
   }
 
@@ -96,6 +103,7 @@ export function EnrolmentStep3Page() {
         <CardAssignModal
           cards={availableCards}
           onSelect={handleSelect}
+          onNewCard={handleNewCard}
           onClose={() => setShowModal(false)}
         />
       )}

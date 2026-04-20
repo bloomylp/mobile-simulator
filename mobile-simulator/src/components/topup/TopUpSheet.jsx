@@ -1,5 +1,5 @@
 // src/components/topup/TopUpSheet.jsx
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, CheckCircle2 } from 'lucide-react'
 import { CardPaymentForm } from './CardPaymentForm.jsx'
 import { ApplePayButton }  from './ApplePayButton.jsx'
@@ -11,12 +11,14 @@ export function TopUpSheet({ onClose, onTopUp }) {
   const [customAmount, setCustomAmount] = useState('')
   const [tab, setTab] = useState('card')
   const [success, setSuccess] = useState(false)
+  const closeTimerRef = useRef(null)
 
+  useEffect(() => () => clearTimeout(closeTimerRef.current), [])
 
   function handleSuccess() {
     onTopUp?.(displayAmount)
     setSuccess(true)
-    setTimeout(onClose, 2000)
+    closeTimerRef.current = setTimeout(onClose, 2000)
   }
 
   const displayAmount = customAmount ? parseFloat(customAmount) || 0 : amount
@@ -92,7 +94,7 @@ export function TopUpSheet({ onClose, onTopUp }) {
                       value={customAmount}
                       onChange={(e) => { setCustomAmount(e.target.value); setAmount(0) }}
                       className="flex-1 text-sm text-[#1A1F2E] focus:outline-none bg-transparent"
-                      aria-label="Custom top-up amount in pounds"
+                      aria-label="Custom top-up amount in dollars"
                     />
                   </div>
                 </div>

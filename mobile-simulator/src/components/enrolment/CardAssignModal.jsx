@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { X, CreditCard, PlusCircle, Smartphone } from 'lucide-react'
 import { Button } from '../ui/Button.jsx'
-import { addExtraCard } from '../../utils/cardsStore.js'
 
 function formatCardNumber(raw) {
   return raw.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
@@ -25,7 +24,7 @@ function isFormComplete({ name, cardNumber, expiry, cvv }) {
 
 const TILE_BASE = 'flex items-center gap-3 bg-[#F4F6F8] rounded-2xl px-4 py-3 cursor-pointer border-2 transition-colors duration-150 min-h-[56px]'
 
-export function CardAssignModal({ cards, onSelect, onClose }) {
+export function CardAssignModal({ cards, onSelect, onClose, onNewCard }) {
   const [selected, setSelected] = useState(null)
   const [form, setForm] = useState({ name: '', cardNumber: '', expiry: '', cvv: '' })
 
@@ -44,13 +43,12 @@ export function CardAssignModal({ cards, onSelect, onClose }) {
         panSuffix: digits.slice(-4),
         expiry: form.expiry,
         status: 'new',
-        cardType: 'digital',
+        cardType: 'physical',
         balance: 0,
         spent: 0,
         createdAt: new Date().toISOString().slice(0, 10),
       }
-      addExtraCard(newCard)
-      onSelect(newCard.id)
+      onNewCard(newCard)
     } else if (selected === '__new-digital-card__') {
       onClose()
     } else {

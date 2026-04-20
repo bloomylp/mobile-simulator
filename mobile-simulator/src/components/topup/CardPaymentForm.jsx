@@ -1,5 +1,5 @@
 // src/components/topup/CardPaymentForm.jsx
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '../ui/Button.jsx'
 import { formatCardNumber, formatExpiry } from '../../utils/formatCard.js'
 
@@ -7,6 +7,9 @@ export function CardPaymentForm({ amount, onSuccess }) {
   const [fields, setFields] = useState({ cardNumber: '', expiry: '', cvv: '', name: '' })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
+  const processingTimerRef = useRef(null)
+
+  useEffect(() => () => clearTimeout(processingTimerRef.current), [])
 
   function update(key, value) {
     setFields((f) => ({ ...f, [key]: value }))
@@ -28,7 +31,7 @@ export function CardPaymentForm({ amount, onSuccess }) {
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setLoading(true)
-    setTimeout(() => { setLoading(false); onSuccess() }, 1200)
+    processingTimerRef.current = setTimeout(() => { setLoading(false); onSuccess() }, 1200)
   }
 
   return (

@@ -585,6 +585,16 @@ describe('TransitPassDetail — trip activity rows', () => {
     goToDetail()
     expect(screen.getAllByText('Station 3')).toHaveLength(2)
   })
+
+  test('second trip row has a top border divider (not overridden by border shorthand)', () => {
+    addTrip({ name: 'Station 1', amount: '$2.00', value: 2, date: 'Apr 17' })
+    addTrip({ name: 'Station 2', amount: '$5.00', value: 5, date: 'Apr 17' })
+    goToDetail()
+    const removeButtons = screen.getAllByRole('button', { name: /remove/i })
+    // i=1 row should have borderTop; border:'none' shorthand must NOT override it
+    // jsdom normalises hex colours to rgb()
+    expect(removeButtons[1].style.borderTop).toBe('1px solid rgb(229, 231, 235)')
+  })
 })
 
 // ─── Pass list screen ───────────────────────────────────────────────
