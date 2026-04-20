@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "littlepay-wallet",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "littlepay-wallet", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}
