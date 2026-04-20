@@ -23,7 +23,7 @@ npm run build     # production build → dist/
 npm run preview   # preview built app
 npm run lint      # ESLint (flat config)
 npm run test      # Vitest watch mode
-npm run test:run  # Vitest single run (535+ tests)
+npm run test:run  # Vitest single run (558 tests)
 npm start         # serve dist/ via Express (EB / prod)
 ```
 
@@ -39,20 +39,23 @@ npm start         # serve dist/ via Express (EB / prod)
 | `/concession` | ConcessionPage |
 | `/enrolment` → `/enrolment/complete` | Concession enrolment wizard (Intro + 4 steps + complete) |
 | `/profile` | ProfilePage |
-| `/help-centre` | HelpCentrePage |
-| `/promotions` | PromotionsPage (Hamburger menu only when Dynamic Island controls visible) |
+| `/promotions` | PromotionsPage (HamburgerMenu only when Dynamic Island controls visible) |
 
 Top-up renders as a bottom-sheet overlay on `/home`.
 
 ## Features
 
-- iPhone + Android (Pixel 10) device shells — toggle at top of frame
-- iOS: full app routes + Dynamic Island side-controls (low balance / push notification)
-- Android: standalone Littlobus transit-pass flow with fare-cap progress bar
-- Concession enrolment flow (group select → SheerID → card link → review)
-- Top-up bottom sheet with Card / Apple Pay tabs
-- EN/ES language toggle
-- Notifications centre with unread badge
+- **iPhone + Android (Pixel 10)** device shells — toggle above the frame when Dynamic Island / punch-hole is tapped
+- **iOS:** full app routes, HamburgerMenu navigation (Home / Cards / Concession / Profile / Promotions), Dynamic Island side-controls (low-balance toast + push notification)
+- **Android:** standalone Littlobus transit-pass flow — add pass, fare-cap progress bar, recent activity, payment issue banner
+- **Concession enrolment wizard** — group select → SheerID identity verification (TEST MODE banner autofills form) → card assign (inline "Add a new card" form with auto-formatting) → review → complete
+- **Multi-concession support** — each completed enrolment appends to the list; ConcessionPage shows `Active (N)` with one card per enrolment
+- **Card ordering** — digital (iOS Add-to-Wallet flow + US transit card selection) or physical; deduplication via store subscription
+- **Top-up bottom sheet** — Card / Apple Pay / Google Pay tabs; persists top-up transactions per card
+- **Per-card transaction history** — date-range filter, grouped by date
+- **EN/ES language toggle**
+- **Notifications centre** — unread badge, low-balance + promotion notification types
+- **Full demo reset** — JR avatar on ProfilePage or Logout in HamburgerMenu wipes all state and returns to login
 
 ## Project Layout
 
