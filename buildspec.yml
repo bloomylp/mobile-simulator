@@ -4,10 +4,13 @@ phases:
   install:
     runtime-versions:
       nodejs: 20
+    commands:
+      - node -v
+      - npm -v
   pre_build:
     commands:
       - echo "Installing all deps (incl. devDependencies for Vite build)"
-      - npm ci
+      - npm ci || npm install
   build:
     commands:
       - echo "Building production bundle"
