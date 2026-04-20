@@ -258,7 +258,7 @@ littlepay-wallet/src/
 ## Add to Wallet
 
 - Digital new cards (`status === 'new' && cardType === 'digital'`) show a permanently disabled "Added to Wallet" black pill
-- No interactive flow — no wallet.png / apple_wallet.png animation
+- No interactive flow — wallet.png deleted; button is always disabled, no animation
 - Wallet state API was removed from cardsStore (unused dead code)
 
 ## Top-Up Transaction Persistence

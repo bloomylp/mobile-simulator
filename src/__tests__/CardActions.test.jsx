@@ -51,18 +51,6 @@ describe('CardActions — Added to Wallet button', () => {
     expect(btn).toBeDisabled()
   })
 
-  test('no wallet.png image is rendered for digital new card', () => {
-    renderActions(digitalNewCard)
-    const img = document.querySelector('img[src="/wallet.png"]')
-    expect(img).toBeNull()
-  })
-
-  test('no apple_wallet.png overlay is rendered for digital new card', () => {
-    renderActions(digitalNewCard)
-    const img = document.querySelector('img[src="/apple_wallet.png"]')
-    expect(img).toBeNull()
-  })
-
   test('physical new card does not show Added to Wallet button', () => {
     renderActions(physicalCard)
     expect(screen.queryByRole('button', { name: /added to wallet/i })).not.toBeInTheDocument()
