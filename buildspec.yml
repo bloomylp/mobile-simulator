@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - node -v
+      - npm -v
+  pre_build:
+    commands:
+      - echo "Installing all deps (incl. devDependencies for Vite build)"
+      - npm ci || npm install
+  build:
+    commands:
+      - echo "Building production bundle"
+      - npm run build
+
+artifacts:
+  base-directory: .
+  files:
+    - server.js
+    - package.json
+    - package-lock.json
+    - dist/**/*
+  discard-paths: no
