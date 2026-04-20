@@ -5,19 +5,19 @@ export const ConcessionContext = createContext(null)
 
 export function ConcessionProvider({ children }) {
   const [enrolled, setEnrolled] = useState(false)
-  const [concessionData, setConcessionDataState] = useState(null)
+  const [concessions, setConcessions] = useState([])
 
   function setConcessionData(group, card) {
-    setConcessionDataState({ group, card, enrolledAt: Date.now() })
+    setConcessions(prev => [...prev, { group, card, enrolledAt: Date.now() }])
   }
 
   function resetConcession() {
     setEnrolled(false)
-    setConcessionDataState(null)
+    setConcessions([])
   }
 
   return (
-    <ConcessionContext.Provider value={{ enrolled, setEnrolled, concessionData, setConcessionData, resetConcession }}>
+    <ConcessionContext.Provider value={{ enrolled, setEnrolled, concessions, setConcessionData, resetConcession }}>
       {children}
     </ConcessionContext.Provider>
   )

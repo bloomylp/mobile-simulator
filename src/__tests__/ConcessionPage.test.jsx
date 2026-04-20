@@ -24,12 +24,12 @@ vi.mock('react-router-dom', async () => {
   return { ...actual, useNavigate: () => mockNavigate }
 })
 
-function renderEnrolled(concessionData = STUDENT_DATA) {
+function renderEnrolled(concessions = [STUDENT_DATA]) {
   return render(
     <MemoryRouter>
       <LangProvider>
         <NotificationsProvider>
-          <ConcessionContext.Provider value={{ enrolled: true, concessionData, setEnrolled: () => {}, setConcessionData: () => {} }}>
+          <ConcessionContext.Provider value={{ enrolled: true, concessions, setEnrolled: () => {}, setConcessionData: () => {} }}>
             <ConcessionPage />
           </ConcessionContext.Provider>
         </NotificationsProvider>
@@ -43,7 +43,7 @@ function renderUnenrolled() {
     <MemoryRouter>
       <LangProvider>
         <NotificationsProvider>
-          <ConcessionContext.Provider value={{ enrolled: false, concessionData: null, setEnrolled: () => {}, setConcessionData: () => {} }}>
+          <ConcessionContext.Provider value={{ enrolled: false, concessions: [], setEnrolled: () => {}, setConcessionData: () => {} }}>
             <ConcessionPage />
           </ConcessionContext.Provider>
         </NotificationsProvider>
@@ -71,6 +71,32 @@ describe('ConcessionPage — header (both states)', () => {
   test('does NOT render concession icon when enrolled', () => {
     renderEnrolled()
     expect(screen.queryByTestId('concession-icon')).not.toBeInTheDocument()
+  })
+
+  test('nav controls appear before title when unenrolled', () => {
+    renderUnenrolled()
+    const title = screen.getByText('Concession and Eligibility')
+    const menuBtn = screen.getByRole('button', { name: /open menu/i })
+    expect(title.compareDocumentPosition(menuBtn) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  })
+
+  test('nav controls appear before title when enrolled', () => {
+    renderEnrolled()
+    const title = screen.getByText('Concession and Eligibility')
+    const menuBtn = screen.getByRole('button', { name: /open menu/i })
+    expect(title.compareDocumentPosition(menuBtn) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  })
+
+  test('nav bar is sticky when unenrolled', () => {
+    renderUnenrolled()
+    const nav = screen.getByTestId('concession-nav-bar')
+    expect(nav.classList.contains('sticky')).toBe(true)
+  })
+
+  test('nav bar is sticky when enrolled', () => {
+    renderEnrolled()
+    const nav = screen.getByTestId('concession-nav-bar')
+    expect(nav.classList.contains('sticky')).toBe(true)
   })
 })
 
@@ -103,33 +129,33 @@ describe('ConcessionPage — unenrolled', () => {
 })
 
 describe('ConcessionPage — enrolled', () => {
-  test('renders Active heading', () => {
-    renderEnrolled()
-    expect(screen.getByText(/Active/i)).toBeInTheDocument()
+  test('renders Active (1) heading with one concession', () => {
+    renderEnrolled([STUDENT_DATA])
+    expect(screen.getByText('Active (1)')).toBeInTheDocument()
   })
 
   test('shows "Student Discount" title for student group', () => {
-    renderEnrolled(STUDENT_DATA)
+    renderEnrolled([STUDENT_DATA])
     expect(screen.getByText('Student Discount')).toBeInTheDocument()
   })
 
   test('shows "Senior Discount" title for senior group', () => {
-    renderEnrolled(SENIOR_DATA)
+    renderEnrolled([SENIOR_DATA])
     expect(screen.getByText('Senior Discount')).toBeInTheDocument()
   })
 
   test('shows "Student Group" in Used For for student', () => {
-    renderEnrolled(STUDENT_DATA)
+    renderEnrolled([STUDENT_DATA])
     expect(screen.getByText(/Student Group/i)).toBeInTheDocument()
   })
 
   test('shows "Senior Group" in Used For for senior', () => {
-    renderEnrolled(SENIOR_DATA)
+    renderEnrolled([SENIOR_DATA])
     expect(screen.getByText(/Senior Group/i)).toBeInTheDocument()
   })
 
   test('shows masked card number with panSuffix', () => {
-    renderEnrolled(STUDENT_DATA)
+    renderEnrolled([STUDENT_DATA])
     expect(screen.getByText(/\*+31230/)).toBeInTheDocument()
   })
 
@@ -139,7 +165,7 @@ describe('ConcessionPage — enrolled', () => {
   })
 
   test('shows Created on date from enrolledAt', () => {
-    renderEnrolled(STUDENT_DATA)
+    renderEnrolled([STUDENT_DATA])
     expect(screen.getByText(/01\/01\/2026/)).toBeInTheDocument()
   })
 
@@ -151,5 +177,22 @@ describe('ConcessionPage — enrolled', () => {
   test('does NOT show enrolment CTA when enrolled', () => {
     renderEnrolled()
     expect(screen.queryByText(/click here to start enrolment/i)).not.toBeInTheDocument()
+  })
+
+  test('renders Active (2) heading with two concessions', () => {
+    renderEnrolled([STUDENT_DATA, SENIOR_DATA])
+    expect(screen.getByText('Active (2)')).toBeInTheDocument()
+  })
+
+  test('renders both concession cards with two concessions', () => {
+    renderEnrolled([STUDENT_DATA, SENIOR_DATA])
+    expect(screen.getByText('Student Discount')).toBeInTheDocument()
+    expect(screen.getByText('Senior Discount')).toBeInTheDocument()
+  })
+
+  test('shows both card suffixes with two concessions', () => {
+    renderEnrolled([STUDENT_DATA, SENIOR_DATA])
+    expect(screen.getByText(/\*+31230/)).toBeInTheDocument()
+    expect(screen.getByText(/\*+99999/)).toBeInTheDocument()
   })
 })

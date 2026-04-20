@@ -1,5 +1,5 @@
 // src/pages/enrolment/EnrolmentCompletePage.jsx
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
 import { Button } from '../../components/ui/Button.jsx'
@@ -11,14 +11,17 @@ export function EnrolmentCompletePage() {
   const { state, resetEnrolment } = useEnrolment()
   const { setEnrolled, setConcessionData } = useConcession()
   const isComplete = Boolean(state.group && state.verified && state.card)
+  const doneClicked = useRef(false)
 
   // Guard against direct navigation with incomplete state — redirect to intro.
+  // Skipped once Done is clicked (resetEnrolment clears state but navigation is intentional).
   useEffect(() => {
-    if (!isComplete) navigate('/enrolment', { replace: true })
+    if (!doneClicked.current && !isComplete) navigate('/enrolment', { replace: true })
   }, [isComplete, navigate])
 
   function handleDone() {
     if (!isComplete) return
+    doneClicked.current = true
     setConcessionData(state.group, state.card)
     setEnrolled(true)
     resetEnrolment()

@@ -30,7 +30,7 @@ function expiryDate(ts) {
 
 function PageHeader({ showIcon = false }) {
   return (
-    <div className="flex flex-col items-center gap-3 pt-14 pb-6 px-5">
+    <div className="flex flex-col items-center gap-3 pt-3 pb-4 px-5">
       <h1 className="text-[#1A1F2E] text-2xl font-bold">Concession and Eligibility</h1>
       {showIcon && (
         <div data-testid="concession-icon" className="w-14 h-14 rounded-2xl bg-[#E8F7F0] flex items-center justify-center translate-y-[10px]">
@@ -41,14 +41,63 @@ function PageHeader({ showIcon = false }) {
   )
 }
 
+function ConcessionCard({ group, card, enrolledAt }) {
+  const labels = GROUP_LABELS[group] ?? { title: 'Concession Discount', usedFor: `${group} Group` }
+  return (
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden border-l-4 border-[#2DB87E]">
+      <div className="px-4 pt-4 pb-3">
+        <div className="flex items-start justify-between mb-3">
+          <span className="text-[#1A1F2E] text-sm font-semibold">{labels.title}</span>
+          <div className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center flex-shrink-0">
+            <BadgePercent size={16} className="text-[#6B7280]" aria-hidden="true" />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 mb-1.5">
+          <Clock size={14} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
+          <span className="text-[#6B7280] text-xs">
+            Eligibility Expiry: {expiryDate(enrolledAt)}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 mb-3">
+          <CreditCard size={14} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
+          <span className="text-[#6B7280] text-xs">Operator:&nbsp; Transit Operator</span>
+        </div>
+
+        <div className="border-t border-gray-100 mb-3" />
+
+        <div className="flex items-center gap-2 mb-3">
+          <CheckCircle size={14} className="text-[#2DB87E] flex-shrink-0" aria-hidden="true" />
+          <span className="text-[#6B7280] text-xs">Used For: {labels.usedFor}</span>
+        </div>
+
+        <div className="border-t border-gray-100 mb-3" />
+
+        <div className="flex items-baseline gap-2 mb-3">
+          <span className="text-[#9CA3AF] text-xs">Created on</span>
+          <span className="text-[#1A1F2E] text-xs font-medium">{formatDateTime(enrolledAt)}</span>
+        </div>
+
+        <div className="flex items-center gap-3 bg-[#F4F6F8] rounded-xl px-3 py-2.5">
+          <CreditCard size={16} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
+          <span className="text-[#1A1F2E] text-sm font-medium tracking-wider">
+            ******{card?.panSuffix ?? ''}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function ConcessionPage() {
   const navigate = useNavigate()
-  const { enrolled, concessionData } = useConcession()
+  const { enrolled, concessions } = useConcession()
 
   if (!enrolled) {
     return (
       <div className="min-h-full bg-[#F4F6F8] flex flex-col px-6 pb-6">
-        <div className="flex items-center justify-between pt-12 pb-4 -mx-0">
+        <div data-testid="concession-nav-bar" className="sticky top-0 z-10 bg-[#F4F6F8] flex items-center justify-between pt-12 pb-4 -mx-0">
           <div className="flex items-center gap-2"><HamburgerMenu /><LangToggle /></div>
           <NotificationBell />
         </div>
@@ -72,78 +121,22 @@ export function ConcessionPage() {
     )
   }
 
-  if (!concessionData) return null
-
-  const { group, card, enrolledAt } = concessionData
-  const labels = GROUP_LABELS[group] ?? { title: 'Concession Discount', usedFor: `${group} Group` }
-
   return (
-    <div className="min-h-full bg-[#F4F6F8] flex flex-col pb-6 px-4 relative">
-      <div className="flex items-center justify-between pt-12 pb-4">
+    <div className="min-h-full bg-[#F4F6F8] flex flex-col pb-32 px-4 relative">
+      <div data-testid="concession-nav-bar" className="sticky top-0 z-10 bg-[#F4F6F8] flex items-center justify-between pt-12 pb-4">
         <div className="flex items-center gap-2"><HamburgerMenu /><LangToggle /></div>
         <NotificationBell />
       </div>
       <PageHeader />
-      {/* Active count */}
-      <h2 className="text-[#1A1F2E] text-base font-bold mb-4 px-1">Active (1)</h2>
+      <h2 className="text-[#1A1F2E] text-base font-bold mb-4 px-1">Active ({concessions.length})</h2>
 
-      {/* Card */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden border-l-4 border-[#2DB87E]">
-        <div className="px-4 pt-4 pb-3">
-
-          {/* Title row */}
-          <div className="flex items-start justify-between mb-3">
-            <span className="text-[#1A1F2E] text-sm font-semibold">{labels.title}</span>
-            <div className="w-8 h-8 rounded-md border border-gray-200 flex items-center justify-center flex-shrink-0">
-              <BadgePercent size={16} className="text-[#6B7280]" aria-hidden="true" />
-            </div>
-          </div>
-
-          {/* Eligibility Expiry */}
-          <div className="flex items-center gap-2 mb-1.5">
-            <Clock size={14} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
-            <span className="text-[#6B7280] text-xs">
-              Eligibility Expiry: {expiryDate(enrolledAt)}
-            </span>
-          </div>
-
-          {/* Operator */}
-          <div className="flex items-center gap-2 mb-3">
-            <CreditCard size={14} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
-            <span className="text-[#6B7280] text-xs">Operator:&nbsp; Transit Operator</span>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-100 mb-3" />
-
-          {/* Used For */}
-          <div className="flex items-center gap-2 mb-3">
-            <CheckCircle size={14} className="text-[#2DB87E] flex-shrink-0" aria-hidden="true" />
-            <span className="text-[#6B7280] text-xs">Used For: {labels.usedFor}</span>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-100 mb-3" />
-
-          {/* Created on */}
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-[#9CA3AF] text-xs">Created on</span>
-            <span className="text-[#1A1F2E] text-xs font-medium">{formatDateTime(enrolledAt)}</span>
-          </div>
-
-          {/* Linked card */}
-          <div className="flex items-center gap-3 bg-[#F4F6F8] rounded-xl px-3 py-2.5">
-            <CreditCard size={16} className="text-[#6B7280] flex-shrink-0" aria-hidden="true" />
-            <span className="text-[#1A1F2E] text-sm font-medium tracking-wider">
-              ******{card?.panSuffix ?? ''}
-            </span>
-          </div>
-
-        </div>
+      <div className="flex flex-col gap-4">
+        {concessions.map((c, i) => (
+          <ConcessionCard key={i} group={c.group} card={c.card} enrolledAt={c.enrolledAt} />
+        ))}
       </div>
 
-      {/* Sticky bottom button */}
-      <div className="fixed bottom-[94px] left-1/2 -translate-x-1/2 w-full max-w-sm px-4">
+      <div className="fixed bottom-[34px] left-1/2 -translate-x-1/2 w-full max-w-sm px-4">
         <button
           onClick={() => navigate('/enrolment')}
           className="w-full bg-[#2DB87E] text-white text-sm font-semibold py-3 rounded-xl cursor-pointer hover:bg-[#1A7A50] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2DB87E]"

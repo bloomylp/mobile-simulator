@@ -211,7 +211,7 @@ function AddToWalletStep({ onNext }) {
 const TRANSIT_CARDS = [
   { id: 'mst',     title: 'MST GO Pass',   subtitle: 'Monterey Salinas Area',      bg: 'linear-gradient(135deg,#8EC5FC,#6CA0DC)' },
   { id: 'hop',     title: 'Hop Fastpass',  subtitle: 'Portland Metropolitan Area', bg: 'linear-gradient(135deg,#6C3FC9,#4B2A9A)' },
-  { id: 'smart',   title: 'SmarTrip',      subtitle: null,                         bg: 'linear-gradient(135deg,#1A6BAA,#0D4D80)' },
+  { id: 'smart',   title: 'Smart Trip',     subtitle: null,                         bg: 'linear-gradient(135deg,#1A6BAA,#0D4D80)' },
   { id: 'tap',     title: 'TAP',           subtitle: null,                         bg: 'linear-gradient(135deg,#F5A623,#D4891A)' },
   { id: 'ventra',  title: 'Ventra',        subtitle: 'Chicago Metropolitan Area',  bg: 'linear-gradient(135deg,#0071C1,#005A9C)' },
 ]

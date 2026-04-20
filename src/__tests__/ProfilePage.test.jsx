@@ -17,7 +17,7 @@ function renderPage(resetConcession = vi.fn()) {
     <MemoryRouter>
       <LangProvider>
         <NotificationsProvider>
-          <ConcessionContext.Provider value={{ enrolled: true, concessionData: {}, setEnrolled: vi.fn(), setConcessionData: vi.fn(), resetConcession }}>
+          <ConcessionContext.Provider value={{ enrolled: true, concessions: [{}], setEnrolled: vi.fn(), setConcessionData: vi.fn(), resetConcession }}>
             <ProfilePage />
           </ConcessionContext.Provider>
         </NotificationsProvider>

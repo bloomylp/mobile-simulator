@@ -58,11 +58,11 @@ describe('EnrolmentCompletePage', () => {
     expect(setConcessionData).toHaveBeenCalledWith('student', card)
   })
 
-  test('Done navigates to /profile', async () => {
+  test('Done navigates to /concession and guard does not override it', async () => {
     const user = userEvent.setup()
     renderPage()
     await user.click(screen.getByRole('button', { name: /done/i }))
-    expect(mockNavigate).toHaveBeenCalledWith('/concession')
+    expect(mockNavigate).toHaveBeenLastCalledWith('/concession')
   })
 
   test('redirects to /enrolment when state is incomplete', () => {

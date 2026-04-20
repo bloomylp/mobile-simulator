@@ -74,4 +74,15 @@ describe('SheerIDModal', () => {
     await user.click(screen.getByRole('button', { name: /close/i }))
     expect(onClose).toHaveBeenCalledTimes(1)
   })
+
+  test('clicking TEST MODE banner autofills all fields and enables Verify and continue', async () => {
+    const user = userEvent.setup()
+    renderModal()
+    await user.click(screen.getByRole('button', { name: /test mode/i }))
+    expect(screen.getByLabelText(/first name/i)).not.toHaveValue('')
+    expect(screen.getByLabelText(/last name/i)).not.toHaveValue('')
+    expect(screen.getByLabelText(/postal code/i)).not.toHaveValue('')
+    expect(screen.getByLabelText(/email address/i)).not.toHaveValue('')
+    expect(screen.getByRole('button', { name: /verify and continue/i })).not.toBeDisabled()
+  })
 })

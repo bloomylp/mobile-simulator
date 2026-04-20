@@ -131,9 +131,9 @@ describe('OrderCompletePage — step 2 (Travel Card)', () => {
     expect(screen.getByText(/hop fastpass/i)).toBeInTheDocument()
   })
 
-  test('shows SmarTrip', () => {
+  test('shows Smart Trip', () => {
     renderStep2()
-    expect(screen.getByText(/smartrip/i)).toBeInTheDocument()
+    expect(screen.getByText(/smart trip/i)).toBeInTheDocument()
   })
 
   test('shows TAP', () => {

@@ -38,9 +38,14 @@ export function SheerIDModal({ onVerified, onClose }) {
       </div>
 
       {/* TEST MODE banner */}
-      <div className="bg-[#D32F2F] text-white text-xs font-semibold text-center py-2 tracking-wide">
-        TEST MODE <span className="underline font-normal cursor-pointer">(learn more)</span>
-      </div>
+      <button
+        type="button"
+        aria-label="Test mode"
+        onClick={() => setForm({ firstName: 'John', lastName: 'Smith', month: 'January', day: '15', year: '1990', postalCode: '10001', email: 'john.smith@example.com' })}
+        className="bg-[#D32F2F] text-white text-xs font-semibold text-center py-2 tracking-wide w-full cursor-pointer focus:outline-none"
+      >
+        TEST MODE <span className="underline font-normal">(learn more)</span>
+      </button>
 
       {verified ? (
         <div className="flex flex-col flex-1 px-6 py-12">
