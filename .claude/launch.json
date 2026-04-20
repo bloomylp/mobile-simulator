@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "littlepay-wallet",
+      "name": "mobile-simulator",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "littlepay-wallet", "run", "dev"],
-      "port": 5173
+      "runtimeArgs": ["--prefix", "mobile-simulator", "run", "dev"],
+      "port": 5176
     }
   ]
 }
